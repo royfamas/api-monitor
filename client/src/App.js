@@ -28,29 +28,57 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>API Monitor</h1>
+  <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+    <h1>API Monitoring Dashboard</h1>
 
+    <div style={{ marginBottom: '20px' }}>
       <input
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         placeholder="Enter API URL"
+        style={{ padding: '8px', width: '300px', marginRight: '10px' }}
       />
-      <button onClick={addEndpoint}>Add</button>
-
-      <ul>
-        {endpoints.map((ep, index) => {
-          const last = ep.history[ep.history.length - 1];
-
-          return (
-            <li key={index}>
-              <strong>{ep.url}</strong> —{' '}
-              {last ? last.status : 'Checking...'}
-            </li>
-          );
-        })}
-      </ul>
+      <button onClick={addEndpoint} style={{ padding: '8px 12px' }}>
+        Add Endpoint
+      </button>
     </div>
+
+    {endpoints.map((ep, index) => {
+      const last = ep.history[ep.history.length - 1];
+
+      const statusColor =
+        last?.status === 'UP' ? 'green' :
+        last?.status === 'DOWN' ? 'red' : 'gray';
+
+      return (
+        <div
+          key={index}
+          style={{
+            border: '1px solid #ccc',
+            padding: '15px',
+            marginBottom: '10px',
+            borderRadius: '8px'
+          }}
+        >
+          <h3>{ep.url}</h3>
+
+          <p>
+            Status:{' '}
+            <strong style={{ color: statusColor }}>
+              {last ? last.status : 'Checking...'}
+            </strong>
+          </p>
+
+          <p>
+            Response Time:{' '}
+            {last && last.responseTime
+              ? `${last.responseTime} ms`
+              : 'N/A'}
+          </p>
+        </div>
+      );
+    })}
+  </div>
   );
 }
 
