@@ -49,105 +49,149 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial' }}>
-      <h1>API Monitoring Dashboard</h1>
+    <div
+      style={{
+        minHeight: '100vh',
+        backgroundColor: '#f5f7fa',
+        padding: '40px',
+        fontFamily: 'Arial'
+      }}
+    >
+      <h1 style={{ marginBottom: '20px' }}>
+        API Monitoring Dashboard
+      </h1>
 
-      <div style={{ marginBottom: '20px' }}>
+      {/* Input Section */}
+      <div
+        style={{
+          display: 'flex',
+          gap: '10px',
+          marginBottom: '30px'
+        }}
+      >
         <input
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Enter API URL"
-          style={{ padding: '8px', width: '300px', marginRight: '10px' }}
+          style={{
+            padding: '10px',
+            width: '350px',
+            borderRadius: '6px',
+            border: '1px solid #ccc'
+          }}
         />
-        <button onClick={addEndpoint} style={{ padding: '8px 12px' }}>
-          Add Endpoint
+        <button
+          onClick={addEndpoint}
+          style={{
+            padding: '10px 16px',
+            backgroundColor: '#1890ff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer'
+          }}
+        >
+          Add
         </button>
       </div>
 
-      {endpoints.map((ep, index) => {
-        const last = ep.history[ep.history.length - 1];
+      {/* Dashboard Cards */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+          gap: '20px'
+        }}
+      >
+        {endpoints.map((ep, index) => {
+          const last = ep.history[ep.history.length - 1];
 
-        const statusColor =
-          last?.status === 'UP'
-            ? 'green'
-            : last?.status === 'DOWN'
-            ? 'red'
-            : 'gray';
+          const statusColor =
+            last?.status === 'UP'
+              ? '#52c41a'
+              : last?.status === 'DOWN'
+              ? '#ff4d4f'
+              : '#999';
 
-        return (
-          <div
-            key={index}
-            style={{
-              border: '1px solid #ccc',
-              padding: '15px',
-              marginBottom: '15px',
-              borderRadius: '8px'
-            }}
-          >
-            <h3>{ep.url}</h3>
-
-            <p>
-              Status:{' '}
-              <strong style={{ color: statusColor }}>
-                {last ? last.status : 'Checking...'}
-              </strong>
-            </p>
-
-            <p>
-              Response Time:{' '}
-              {last && last.responseTime
-                ? `${last.responseTime} ms`
-                : 'N/A'}
-            </p>
-
-            <p>
-              Last Checked:{' '}
-              {last
-                ? new Date(last.time).toLocaleTimeString()
-                : 'N/A'}
-            </p>
-
-            <div style={{ marginTop: '10px' }}>
-              <strong>History:</strong>
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '5px',
-                  marginTop: '5px'
-                }}
-              >
-                {ep.history.map((h, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: '10px',
-                      height: '10px',
-                      borderRadius: '50%',
-                      backgroundColor:
-                        h.status === 'UP' ? 'green' : 'red'
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-            
-            <button
-              onClick={() => deleteEndpoint(index)}
+          return (
+            <div
+              key={index}
               style={{
-                marginTop: '10px',
-                padding: '5px 10px',
-                backgroundColor: '#ff4d4f',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer'
+                backgroundColor: 'white',
+                padding: '20px',
+                borderRadius: '10px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
               }}
             >
-              Delete
-            </button>
-          </div>
-        );
-      })}
+              <h3 style={{ marginBottom: '10px' }}>{ep.url}</h3>
+
+              <p>
+                Status:{' '}
+                <strong style={{ color: statusColor }}>
+                  {last ? last.status : 'Checking...'}
+                </strong>
+              </p>
+
+              <p>
+                Response Time:{' '}
+                {last && last.responseTime
+                  ? `${last.responseTime} ms`
+                  : 'N/A'}
+              </p>
+
+              <p>
+                Last Checked:{' '}
+                {last
+                  ? new Date(last.time).toLocaleTimeString()
+                  : 'N/A'}
+              </p>
+
+              {/* History */}
+              <div style={{ marginTop: '10px' }}>
+                <strong>History:</strong>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: '5px',
+                    marginTop: '5px'
+                  }}
+                >
+                  {ep.history.map((h, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        width: '10px',
+                        height: '10px',
+                        borderRadius: '50%',
+                        backgroundColor:
+                          h.status === 'UP'
+                            ? '#52c41a'
+                            : '#ff4d4f'
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Delete Button */}
+              <button
+                onClick={() => deleteEndpoint(index)}
+                style={{
+                  marginTop: '15px',
+                  padding: '6px 12px',
+                  backgroundColor: '#ff4d4f',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer'
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
