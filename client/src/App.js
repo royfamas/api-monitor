@@ -37,6 +37,17 @@ function App() {
     }
   };
 
+  const deleteEndpoint = async (index) => {
+    try {
+      await fetch(`http://localhost:5000/endpoints/${index}`, {
+        method: 'DELETE'
+      });
+      fetchEndpoints();
+    } catch (err) {
+      console.error('Error deleting endpoint:', err);
+    }
+  };
+
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial' }}>
       <h1>API Monitoring Dashboard</h1>
@@ -119,6 +130,21 @@ function App() {
                 ))}
               </div>
             </div>
+            
+            <button
+              onClick={() => deleteEndpoint(index)}
+              style={{
+                marginTop: '10px',
+                padding: '5px 10px',
+                backgroundColor: '#ff4d4f',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer'
+              }}
+            >
+              Delete
+            </button>
           </div>
         );
       })}

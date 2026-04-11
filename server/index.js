@@ -26,6 +26,17 @@ app.post('/endpoints', (req, res) => {
   res.json({ message: 'Endpoint added' });
 });
 
+app.delete('/endpoints/:index', (req, res) => {
+  const index = parseInt(req.params.index);
+
+  if (index >= 0 && index < endpoints.length) {
+    endpoints.splice(index, 1);
+    res.json({ message: 'Endpoint removed' });
+  } else {
+    res.status(404).json({ error: 'Invalid index' });
+  }
+});
+
 // Monitoring loop
 setInterval(async () => {
   for (let endpoint of endpoints) {
